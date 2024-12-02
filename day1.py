@@ -5,11 +5,14 @@ filename = 'bin/day1.txt'
 locations = read_stripped_columns(filename, nums=True)
 for location_data in locations:
     location_data.sort()
-print(locations)
 
 distance_total = 0
-for index in range(len(locations[0])):
-    distance = abs(locations[0][index] - locations[1][index])
-    distance_total += distance
+for left_value in locations[0]:
+    value_count = 0
+    for right_value in locations[1]:
+        if left_value == right_value:
+            value_count += 1
+    distance_total += left_value * value_count
+
 
 print(f'Total: {distance_total}')

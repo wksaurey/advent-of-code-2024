@@ -25,5 +25,8 @@ def read_stripped_columns(path: str, chars: str = '\n', nums = False) -> List[st
                     data[index].append(value)
         return data
 
+def window(data_list, w_size):
+    pass
+
 def manhattanDistance(x1: int, y1: int, x2: int, y2: int) -> int:
     return abs(x1-x2) + abs(y1-y2)

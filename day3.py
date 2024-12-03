@@ -9,19 +9,38 @@ def main():
         memory = file.readlines()
 
         total = 0
+        enabled = True
         for line in memory:
-            instructions = re.findall("mul\([0-9]{1,3},[0-9]{1,3}\)", line)
+            for index, value in enumerate(line):
+                if value in ['m', 'd']:
+                    if re.search("^mul\([0-9]{1,3},[0-9]{1,3}\)", line[index:]):
+                        test = line[index: index + 12]
+                        print(test)
+                        if enabled:
+                            total += calculate(re.search("^mul\([0-9]{1,3},[0-9]{1,3}\)", line[index:]).group())
+                            enabled = False
 
-            for instruction in instructions:
-                values = re.findall("[0-9]{1,3}", instruction)
-                if len(values) > 2:
-                    print('Found more than 2 values')
-                result = int(values[0]) * int(values[1])
-                debug(f'{values[0]} X {values[1]} = {result}')
-                total += result
+                    elif re.search("^do\(\)", line[index:]):
+                        test = line[index: index + 4]
+                        print(test)
+                        print('enable')
+                        enabled = True
+                    elif re.search("^don't\(\)", line[index:]):
+                        test = line[index: index + 7]
+                        print(test)
+                        print('disable')
+                        enabled = False
 
         print(f'Total: {total}')
-        # 28476021 too low
+        # 8133565 too low
+
+def calculate(value):
+    values = re.findall("[0-9]{1,3}", value)
+    if len(values) > 2:
+        print('Found more than 2 values')
+    result = int(values[0]) * int(values[1])
+    debug(f'{values[0]} X {values[1]} = {result}')
+    return result
 
 def debug(value):
     if debug:

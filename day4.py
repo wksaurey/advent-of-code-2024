@@ -4,93 +4,38 @@ def main():
     filename = 'bin/day4.txt'
 
     crossword = read_stripped_compressed_grid(filename)
-    print(crossword)
+    # print(crossword)
 
     count = 0
-    matches = ['XMAS', 'SAMX']
+    matches = ['MAS', 'SAM']
     for line_index, line in enumerate(crossword):
         for value_index, value in enumerate(line):
-            if value == 'X':
-                top = False 
-                bottom = False 
-                left = False 
-                right = False
-                if line_index >= 3:
-                    top = True
-                if len(crossword) - line_index > 3:
-                    bottom = True
-                if value_index >= 3:
-                    left = 3
-                if len(line) - value_index > 3:
-                    right = 3
+            if value == 'A':
+                if (line_index >= 1 and line_index < len(crossword) - 1 and
+                        value_index >= 1 and value_index < len(line) - 1):
 
-                if top:
-                    test_string = ''
-                    for i in range(line_index-3, line_index+1):
-                        test_value = crossword[i][value_index]
-                        test_string += test_value
-                    if test_string in matches:
-                        print(f'Top: {test_string}')
-                        count += 1
-                if bottom:
-                    test_string = ''
-                    for i in range(line_index, line_index+4):
-                        test_value = crossword[i][value_index]
-                        test_string += test_value
-                    if test_string in matches:
-                        print(f'Bottom: {test_string}')
-                        count += 1
-                if left:
-                    test_string = ''.join(line[value_index-3:value_index+1])
-                    if test_string in matches:
-                        print(f'Left: {test_string}')
-                        count += 1
-                if right:
-                    test_string = ''.join(line[value_index:value_index+4])
-                    if test_string in matches:
-                        print(f'Right: {test_string}')
-                        count += 1
+                    test_string1 = ''
+                    for d_index in range(3):
+                        test_value = crossword[line_index-1+d_index][value_index-1+d_index]
+                        test_string1 += test_value
+                    
+                    test_string2 = ''
+                    for d_index in range(3):
+                        test_value = crossword[line_index-1+d_index][value_index+1-d_index]
+                        test_string2 += test_value
 
-                if top and left:
-                    test_string = ''
-                    for d_index in range(4):
-                        test_value = crossword[line_index-d_index][value_index-d_index]
-                        test_string += test_value
-                    if test_string in matches:
-                        print(f'Top Left: {test_string}')
-                        count += 1
 
-                if top and right:
-                    test_string = ''
-                    for d_index in range(4):
-                        test_value = crossword[line_index-d_index][value_index+d_index]
-                        test_string += test_value
-                    if test_string in matches:
-                        print(f'Top Right: {test_string}')
+                    if test_string1 in matches and test_string2 in matches:
+                        print_square(line_index, value_index, crossword)
                         count += 1
-
-                if bottom and left:
-                    test_string = ''
-                    for d_index in range(4):
-                        test_value = crossword[line_index+d_index][value_index-d_index]
-                        test_string += test_value
-                    if test_string in matches:
-                        print(f'Bottom Left: {test_string}')
-                        count += 1
-
-                if bottom and right:
-                    test_string = ''
-                    for d_index in range(4):
-                        test_value = crossword[line_index+d_index][value_index+d_index]
-                        test_string += test_value
-                    if test_string in matches:
-                        print(f'Bottom Right: {test_string}')
-                        count += 1
-
 
     print(f'Count: {count}')
+    # 1951 too low
 
-
+def print_square(row_index, col_index, crossword):
+    print('---')
+    for i in range(row_index-1, row_index+2):
+        print(''.join(crossword[i][col_index-1:col_index+2]))
                 
 
 main()

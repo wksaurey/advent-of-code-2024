@@ -2,19 +2,30 @@
 def main():
     filename = 'bin/day5.txt'
     before_rules, updates = get_input(filename)
-    print(updates)
 
-    count = 0
-    total = 0
+    ordered_total = 0
+    un_ordered_total = 0
     for update in updates:
         if check_page_order(update, before_rules):
-            count += 1
             middle = int(update[int(len(update)/2)])
-            print(middle)
-            total += middle
+            ordered_total += middle
+        else:
+            update = reorder_update(update, before_rules)
+            middle = int(update[int(len(update)/2)])
+            un_ordered_total += middle
 
-    print(f'Count: {count}')
-    print(f'Total: {total}')
+    print(f'Ordered Total: {ordered_total}')
+    print(f'Un-Ordered Total: {un_ordered_total}')
+
+
+def reorder_update(update, before_rules):
+    while not check_page_order(update, before_rules):
+        for index, page in enumerate(update):
+            for i in range(index):
+                previous_page = update[i]
+                if previous_page in before_rules and page in before_rules[previous_page]:
+                    update.insert(index, update.pop(i))
+    return update
 
 def check_page_order(update, before_rules):
     for index, page in enumerate(update):

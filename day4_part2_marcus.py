@@ -154,7 +154,7 @@ col_pos = find_col_pos(col_pos)
 diag1_pos = find_diag_pos(diag1_pos, diag1_gridpos)
 diag2_pos = find_diag_pos(diag2_pos, diag2_gridpos)
 x_mas_count = 0
-x_mas_count = count_x_mas(row_pos,col_pos,x_mas_count)
+# x_mas_count = count_x_mas(row_pos,col_pos,x_mas_count)
 x_mas_count = count_x_mas(diag1_pos, diag2_pos, x_mas_count)
 print(x_mas_count)
 #1895 too high

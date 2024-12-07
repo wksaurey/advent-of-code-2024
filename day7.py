@@ -24,6 +24,7 @@ def can_calculate(values, result):
     y = values.pop(0)
 
     return (can_calculate([x + y] + values, result) or
-            can_calculate([x * y] + values, result))
+            can_calculate([x * y] + values, result) or
+            can_calculate([int(str(x) + str(y))] + values, result))
 
 main()

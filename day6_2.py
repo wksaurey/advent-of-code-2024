@@ -1,11 +1,13 @@
 from util import read_stripped_compressed_grid
 import copy
+from time import time
 
 def main():
     filename = 'bin/day6.txt'
 
     original_map = read_stripped_compressed_grid(filename)
 
+    start = time()
     loop_count = 0
     map_version = 0
     for row_index, line in enumerate(original_map):
@@ -14,13 +16,14 @@ def main():
             if value == '.':
                 test_map[row_index][col_index] = '#'
                 guard = Guard(original_map)
-                print(f'Map Version {map_version}')
+                # print(f'Map Version {map_version}')
                 # print_map(test_map)
                 map_version += 1
                 if is_loop(guard, test_map):
                     loop_count += 1
 
     print(f'Loop Count: {loop_count}')
+    print(f'Completed in {time() - start} seconds')
 
 def is_loop(guard, test_map):
     while True:

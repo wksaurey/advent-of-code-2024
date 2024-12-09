@@ -1,7 +1,7 @@
 from util import read_stripped_compressed_grid
 
 def main():
-    filename = 'bin/day8_test.txt'
+    filename = 'bin/day8.txt'
 
     grid = read_stripped_compressed_grid(filename)
     print_grid(grid)
@@ -27,7 +27,7 @@ def get_antinodes(antennas, grid):
                 dx = x1 - x2
                 dy = y1 - y2
 
-                new_antinodes = [(x1 - dx, y1 - dy), (x1 + dx, y1 + dy)]
+                new_antinodes = [(x1 + dx, y1 + dy), (x2 - dx, y2 - dy)]
 
                 for antinode in new_antinodes:
                     x, y = antinode

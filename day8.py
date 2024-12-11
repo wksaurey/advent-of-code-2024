@@ -7,9 +7,9 @@ def main():
     print_grid(grid)
 
     antennas = get_antennas(grid)
-    print(antennas)
+    # print(antennas)
 
-    print()
+    # print()
     antinodes = get_antinodes(antennas, grid)
 
     for antinode in antinodes:
@@ -27,22 +27,30 @@ def get_antinodes(antennas, grid):
                 dx = x1 - x2
                 dy = y1 - y2
 
-                new_antinodes = [(x1 + dx, y1 + dy), (x2 - dx, y2 - dy)]
-
-                for antinode in new_antinodes:
+                index = 0
+                direction = 1
+                while True:
+                    antinode = (x1 + index * dx, y1 + index * dy) 
                     x, y = antinode
                     if (x < 0 or x >= len(grid[0]) or 
                             y < 0 or y >= len(grid)):
-                        continue
+                        if direction == 1:
+                            direction = -1
+                            index = 0
+                            continue
+                        else:
+                            break
                     if antinode in antinodes:
+                        index += direction
                         continue
 
-                    print(f'({x}, {y})')
+                    # print(f'({x}, {y})')
                     if grid[y][x] == '.':
                         grid[y][x] = '#'
+                        print_grid(grid)
 
-                    print_grid(grid)
                     antinodes.append(antinode)
+                    index += direction
 
     return antinodes
 

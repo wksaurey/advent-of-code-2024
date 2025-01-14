@@ -1,8 +1,8 @@
 from util import read_stripped_lines
 
 def main():
-    filename = 'bin/day9_test.txt'
-    # filename = 'bin/day9.txt'
+    # filename = 'bin/day9_test.txt'
+    filename = 'bin/day9.txt'
 
     disk_map = read_stripped_lines(filename, nums=True)[0]
 
@@ -24,13 +24,14 @@ def main():
         is_file = not is_file
 
     defrag(disk)
-    print_disk(disk)
+    # print_disk(disk)
 
     checksum = 0
     index = 0
     for file in disk:
         if file.is_space():
-            break
+            index += file.len
+            continue
 
         for _ in range(file.len):
             # print(f'{file.id} * {index} = {file.id * index}')
@@ -38,45 +39,37 @@ def main():
             index += 1
 
     print(f'Checksum: {checksum}')
-    # 258894222412 too low
 
 def defrag(disk):
 
-    while True:
-        print_disk(disk)
+    for file_id in range(disk[get_file_index(disk)].id, -1, -1):
+        # print_disk(disk)
         # print(f'Disk len: {len(disk)}')
         # print(f'Space len {disk[-1].len}')
-        file_index, file = get_file(disk) 
-        space_index, space = get_space(disk)
-        print(f'File: {file.id}')
+        file_index, file = get_file(file_id, disk) 
+        result = get_space(file.len, disk)
+        if result == False:
+            continue
+        space_index, space = result
+        # print(f'File: {file.id}')
 
         if space_index > file_index:
-            break
+            continue
 
-        if file.len > space.len:
-            if disk[-1].is_space():
-                disk[-1].len += space.len
-            else:
-                disk.insert(len(disk), File(space.id, space.len))
-            space.id = file.id
-            file.len -= space.len
+        # if file.len > space.len:
+        #     if disk[-1].is_space():
+        #         disk[-1].len += space.len
+        #     else:
+        #         disk.insert(len(disk), File(space.id, space.len))
+        #     space.id = file.id
+        #     file.len -= space.len
         elif space.len > file.len:
-            disk.insert(space_index, file)
-            if disk[-1].is_space():
-                disk[-1].len += space.len
-            else:
-                disk.insert(len(disk), File(space.id, file.len))
+            disk.insert(space_index, File(file.id, file.len))
             space.len -= file.len
-            file_index, file = get_file(disk) 
-            disk.pop(file_index)
+            file.id = '.'
         elif file.len == space.len:
             space.id = file.id
-            if disk[-1].is_space():
-                disk[-1].len += space.len
-            else:
-                disk.insert(len(disk), File(space.id, file.len))
-            file_index, file = get_file(disk) 
-            disk.pop(file_index)
+            file.id = '.'
 
         if disk[-1].is_space() and disk[-2].is_space():
             disk[-2].len += disk[-1].len
@@ -95,16 +88,32 @@ def defrag(disk):
 #             index += 1
 
 
-def get_file(disk):
+def get_file_index(disk):
     for index in range(len(disk)-1, -1, -1):
         file = disk[index]
         if not file.is_space():
-            return index, file
+            return index
 
-def get_space(disk):
+def get_file(current_id, disk):
+    for index in range(len(disk)-1, -1, -1):
+        file = disk[index]
+        if file.id == current_id:
+            return index, file
+    print(f"The id {current_id} wasn't found in the disk")
+
+def get_space_index(disk):
     for index, file in enumerate(disk):
         if file.is_space():
-            return index, file
+            return index
+
+def get_space(len, disk):
+    for index, file in enumerate(disk):
+        if file.is_space():
+            if file.len >= len:
+                return index, file
+    print(f"The no spaces larger than {len} were found on the disk")
+    return False
+    
     
 def print_disk(disk):
     for file in disk:

@@ -25,7 +25,7 @@ def main():
         for section in sections:
             new_trail = trail.trail_copy() 
             new_trail.append(section)
-            if section.value == 9 and not section.location in new_trail.trailhead.peaks:
+            if section.value == 9:
                 new_trail.trailhead.peaks.append(section.location)
                 new_trail.trailhead.score += 1
                 # new_trail.trailhead.print_data()

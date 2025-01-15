@@ -9,8 +9,10 @@ def main():
     # print(*stones)
     # print()
 
-    blinks = 25
+    blinks = 75
     plural = ''
+    last_count = len(stones)
+    last_delta = 0
     for blink_index in range(blinks):
 
         data_to_add = []
@@ -30,6 +32,13 @@ def main():
                 index, stone = data
                 stones.insert(index, str(int(stone)))
 
+        print(f'{len(stones)} Stones after {blink_index+1} blinks')
+        current_count = len(stones)
+        current_delta = current_count - last_count
+        print(f'Delta {current_count - last_count}')
+        print(f'Delta Delta {current_delta - last_delta}')
+        last_count = current_count
+        last_delta = current_delta
         # print(f'After {blink_index+1} blink{plural}')
         # print(*stones)
         # print()
